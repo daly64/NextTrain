@@ -1,11 +1,20 @@
+package com.example.nexttrain
+
+import android.annotation.SuppressLint
+import android.os.CountDownTimer
+import android.widget.TextView
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 
-class TrainTime(destination: String) {
+class TrainTime(
+    private val destination: String,
+    private val label: TextView,
+    timerState: Boolean
+) {
 
-    val tunisToRades = listOf<String>(
+    //    set rades time line
+    private val tunisToRades = listOf<String>(
         "05:00", "05:30",
         "06:00", "06:20", "06:30", "06:40", "06:55", "07:00", "07:20",
         "07:30", "07:40", "08:00", "08:15", "08:20", "08:30", "08:40",
@@ -18,7 +27,8 @@ class TrainTime(destination: String) {
         "19:30", "19:40", "20:00", "21:00", "21:30", "22:00", "22:30"
     )
 
-    val radesToTunis = listOf<String>(
+    //set tunis time line
+    private val radesToTunis = listOf<String>(
         "04:59", "05:30",
         "05:50", "05:59", "06:01", "06:26", "06:34", "06:49", "06:59",
         "07:01", "07:30", "07:46", "07:50", "07:59", "08:01", "08:30",
@@ -32,64 +42,77 @@ class TrainTime(destination: String) {
     )
 
     // get current time
-    private val current = LocalTime.now()
-//    private val current = LocalTime.parse("17:30:35")
+    private lateinit var current: LocalTime
 
     // get train time
-//    private val train = LocalTime.parse("15:00:22")
     private lateinit var train: LocalTime
 
     // set i as index variable
-    var i = 0
+    private var i = 0
 
-    init {
-
-        when (destination) {
-            "Tunis" -> {
-                // get train time
-                train = LocalTime.parse(radesToTunis[i])
-            }
-            "Rades" -> {
-                // get train time
-                train = LocalTime.parse(tunisToRades[i])
-            }
+    private val timer = object : CountDownTimer(30000, 1000) {
+        override fun onTick(millisUntilFinished: Long) {
+            verify()
         }
-        main()
+
+        override fun onFinish() {
+            this.start()
+        }
     }
 
-    private fun main() {
+    init {
+        // check if timer is enabled
+        if (timerState) timer.start()
+        else timer.cancel()
 
-        // set time formatter
-        val formatter = DateTimeFormatter.ofPattern("HH:mm")
-        // set formatted curent time
-        val formattedCurrent = current.format(formatter)
-        // print all times
-        println("current $formattedCurrent \ntrain time $train")
+    }
+
+    private fun verify() {
+        current = LocalTime.now()
+        when (destination) {
+            "Tunis" ->
+                // get train time
+                train = LocalTime.parse(radesToTunis[i])
+
+            "Rades" ->
+                // get train time
+                train = LocalTime.parse(tunisToRades[i])
+
+        }
+
         // if train time is after current
         if (train.isAfter(current)) notPassed()
+
         // if train time is before current time
         if (train.isBefore(current)) passed()
     }
 
     // set what to do if train has not passed yet
     private fun notPassed() {
-//        println("the train has not passed yet")
-        println("remain ${remain(current, train)}")
+        remain(current, train)
+
     }
 
     // set what to do if train has passed
     private fun passed() {
-//        println("the train has passed ")
-        i++
+        if (i < radesToTunis.lastIndex || i < tunisToRades.lastIndex) {
+            i++
+            verify()
+        }
+
     }
 
+    @SuppressLint("SetTextI18n")
     // calculate remain time
-    private fun remain(fromTime: LocalTime, toTime: LocalTime): String {
+    private fun remain(fromTime: LocalTime, toTime: LocalTime) {
         // get time interval between tow times in seconds
         val interval = fromTime.until(toTime, ChronoUnit.SECONDS)
         val h = interval / 3600
         val mn = interval % 3600 / 60
         val s = interval % 3600 % 60
-        return String.format("%02d:%02d:%02d", h, mn, s)
+        val remain = String.format("%02d:%02d:%02d", h, mn, s)
+        label.text = " the train to $destination is for $train\n you still have  $remain "
     }
+
+
 }
