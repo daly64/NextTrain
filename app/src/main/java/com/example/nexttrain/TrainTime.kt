@@ -9,8 +9,7 @@ import java.time.temporal.ChronoUnit
 
 class TrainTime(
     private val destination: String,
-    private val label: TextView,
-    timerState: Boolean
+    private val label: TextView
 ) {
 
     //    set rades time line
@@ -50,20 +49,23 @@ class TrainTime(
     // set i as index variable
     private var i = 0
 
-    private val timer = object : CountDownTimer(30000, 1000) {
+    private val timer = object : CountDownTimer(1000, 1000) {
         override fun onTick(millisUntilFinished: Long) {
             verify()
+
         }
 
         override fun onFinish() {
             this.start()
+
+
         }
     }
 
     init {
         // check if timer is enabled
-        if (timerState) timer.start()
-        else timer.cancel()
+        timer.start()
+
 
     }
 
@@ -90,7 +92,6 @@ class TrainTime(
     // set what to do if train has not passed yet
     private fun notPassed() {
         remain(current, train)
-
     }
 
     // set what to do if train has passed
@@ -98,8 +99,7 @@ class TrainTime(
         if (i < radesToTunis.lastIndex || i < tunisToRades.lastIndex) {
             i++
             verify()
-        }
-
+        } else i = 0
     }
 
     @SuppressLint("SetTextI18n")
@@ -111,7 +111,8 @@ class TrainTime(
         val mn = interval % 3600 / 60
         val s = interval % 3600 % 60
         val remain = String.format("%02d:%02d:%02d", h, mn, s)
-        label.text = " the train to $destination is for $train\n you still have  $remain "
+        label.text =
+            "the train to $destination is for $train\n you still have  $remain "
     }
 
 

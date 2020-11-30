@@ -7,25 +7,24 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/toRades"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/versrades"
+        app:layout_constraintStart_toStartOf="@+id/toTunis"
+        app:layout_constraintTop_toBottomOf="@+id/toTunis" />
+
+    <TextView
         android:id="@+id/toTunis"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="38dp"
-        android:layout_marginLeft="38dp"
-        android:layout_marginTop="110dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="46dp"
         android:text="@string/verstunis"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/toRades"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="39dp"
-        android:layout_marginLeft="39dp"
-        android:layout_marginTop="44dp"
-        android:text="@string/versrades"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
