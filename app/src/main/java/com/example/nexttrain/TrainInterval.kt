@@ -60,7 +60,7 @@ class TrainInterval {
                     val remain = String.format("%02d:%02d:%02d", h, mn, s)
 
                     label.text =
-                        "Vers $destinationTown est à $t \n il vous reste  $remain "
+                        "Train vers $destinationTown --> $t \n Reste --> $remain "
                 } else if(i<tab.lastIndex) {
 
                     i += 1
