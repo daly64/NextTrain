@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Next Train</string>
+    <string name="verstunis">versTunis</string>
+    <string name="versrades">versRades</string>
+    <string name="tunis">Tunis</string>
+    <string name="rades">Rades</string>
+</resources>
